@@ -34,7 +34,9 @@ botpostable = [
 class Computer(Player):
 
     def play(self, game):
-        return self.bestMove(game, game.table, game.size, self.sign)[0]
+        (x, y), _ = self._best_move(game, game.table, game.size, self.sign)
+        self._robot_place_piece(x, y)
+        return (x, y)
 
     # Selectionner la meilleure possibilitee de jeu
     def bestMove(self, game, table, size, sign):
@@ -83,11 +85,11 @@ class Computer(Player):
             robot.move_joints(*observation_joints)
             robot.open_gripper()
             time.sleep(GRIPPER_DELAY)
-            
+
             robot.move_joints(*botpostable[x][y])  # va sur la case choisie
             robot.close_gripper()                  # prend la pièce
             time.sleep(GRIPPER_DELAY)
-            
+
             robot.move_joints(*observation_joints)  # retour observation
         except NiryoRobotException as e:
             print(f"  [ERREUR NIRYO] {e}")
