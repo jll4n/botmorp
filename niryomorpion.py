@@ -78,6 +78,20 @@ class Computer(Player):
         # Et on joue le meilleur
         return moves[0]
 
+    def _robot_place_piece(self, x, y):
+        try:
+            robot.move_joints(*observation_joints)
+            robot.open_gripper()
+            time.sleep(GRIPPER_DELAY)
+            
+            robot.move_joints(*botpostable[x][y])  # va sur la case choisie
+            robot.close_gripper()                  # prend la pièce
+            time.sleep(GRIPPER_DELAY)
+            
+            robot.move_joints(*observation_joints)  # retour observation
+        except NiryoRobotException as e:
+            print(f"  [ERREUR NIRYO] {e}")
+
 class Game:
 
     # Initialisation du tableau de jeu
